@@ -1,0 +1,14 @@
+.my-form {
+    animation-duration: 3s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      object-position: 0%;
+    }
+  
+    to {
+        object-position: 50%;
+    }
+  }
