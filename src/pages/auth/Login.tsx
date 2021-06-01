@@ -52,6 +52,10 @@ const SignIn: FunctionComponent<any> = (props: any) => {
   });
   const [formIsValid, setFormIsValid] = useState(false);
 
+  const onClickLink: (React.MouseEventHandler<HTMLAnchorElement> & React.MouseEventHandler<HTMLSpanElement>) = () => {
+    props.history.replace('/auth/reset');
+  }
+
   const onChangePassword: React.ChangeEventHandler<
     HTMLTextAreaElement | HTMLInputElement
   > = (e) => {
@@ -132,7 +136,7 @@ const SignIn: FunctionComponent<any> = (props: any) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link variant="body2" onClick={onClickLink}>
                 Forgot password?
               </Link>
             </Grid>

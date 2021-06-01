@@ -32,7 +32,7 @@ import AddStudentIcon from '@material-ui/icons/Add';
 import ChatSharpIcon from '@material-ui/icons/ChatSharp';
 import SignIn from './pages/auth/Login';
 import SingUp from './pages/auth/secretary/AddStudent';
-import TablesRebuild from './pages/secretary/TableUsers.rebuild';
+import TablesRebuild from './pages/secretary/tables/TableUsers';
 import { Link, withRouter } from 'react-router-dom';
 import IndexPage from './pages/IndexPage';
 import IHistoryProps from './models/props/IHistory';
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-    //   padding: theme.spacing(3),
+      //   padding: theme.spacing(3),
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -235,8 +235,8 @@ function PersistentDrawerLeft(props: any) {
       setIsAuth(false);
       setAuthLoading(false);
       setError(err);
-      if(err.message.includes("Network Error")) {
-          props.history.replace('/error/500')
+      if (err.message.includes('Network Error')) {
+        props.history.replace('/error/500');
       }
     }
   };
@@ -306,14 +306,14 @@ function PersistentDrawerLeft(props: any) {
         <Divider />
         <List>
           {isAuth && (
-            <ListItem button key={0}>
+            <ListItem button key={0} component={Link} to={`/${role}/profile`}>
               <ListItemIcon>
                 <VerifiedUser />
               </ListItemIcon>
               <ListItemText primary={'Профиль'} />
             </ListItem>
           )}
-          {isAuth && (
+          {isAuth && role === 'secretary' && (
             <ListItem button key={1} component={Link} to="/secretary/students">
               <ListItemIcon>
                 <StudentList />
@@ -321,23 +321,28 @@ function PersistentDrawerLeft(props: any) {
               <ListItemText primary={'Студенты'} />
             </ListItem>
           )}
-          {isAuth && (
-            <ListItem button key={2}>
+          {isAuth && role === 'secretary' && (
+            <ListItem button key={2} component={Link} to="/secretary/subjects">
               <ListItemIcon>
                 <SubjectsList />
               </ListItemIcon>
               <ListItemText primary={'Предметы'} />
             </ListItem>
           )}
-          {isAuth && (
-            <ListItem button key={3}>
+          {isAuth && role === 'secretary' && (
+            <ListItem
+              button
+              key={3}
+              component={Link}
+              to="/secreatry/findsuitablestudent"
+            >
               <ListItemIcon>
                 <SearchStudent />
               </ListItemIcon>
               <ListItemText primary={'Поиск студента'} />
             </ListItem>
           )}
-          {isAuth && (
+          {isAuth && role === 'secretary' && (
             <ListItem button key={4} component={Link} to="/auth/signup">
               <ListItemIcon>
                 <AddStudentIcon />

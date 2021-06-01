@@ -4,8 +4,8 @@ import {
   GridColDef,
   GridValueGetterParams,
 } from '@material-ui/data-grid';
-import { CircularProgress } from '@material-ui/core';
-import axios from '../../axios-default';
+import { CircularProgress, Grid } from '@material-ui/core';
+import axios from '../../../axios-default';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -68,7 +68,7 @@ export default function DataTable(props: any) {
         group: string;
         firstName: string;
         lastName: string;
-      }> = []
+      }> = [];
       data.students.map((item: any, index: number) => {
         rows1.push({
           id: index + 1,
@@ -84,16 +84,29 @@ export default function DataTable(props: any) {
     getStudents();
   }, []);
 
-  return !isLoading ? (
+  return (
     <div style={{ height: '83vh', width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={20}
-        checkboxSelection={false}
-      />
+      {!isLoading ? (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={20}
+          checkboxSelection={false}
+        />
+      ) : (
+        <Grid
+          container
+          justify="center"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <CircularProgress />
+        </Grid>
+      )}
     </div>
-  ) : (
-    <CircularProgress />
   );
 }

@@ -9,10 +9,11 @@ import ConfirmPassword from './auth/ConfirmPassword';
 import NotFound from './error/404/NotFound';
 import ServerError from './error/500/ServerError';
 import Forbidden from './error/403/Forbidden';
-import TableUser from './secretary/TableUsers.rebuild';
+import TableUser from './secretary/tables/TableUsers';
 import StudentProfile from './student/StudentProfile';
-import FormEmployer from './secretary/FormEmployer';
 import SecretaryProfile from './secretary/profile/SecretaryProfile';
+import Subjects from './secretary/tables/TableSubjects';
+import TableForEmployer from './secretary/tables/TableForEmployer';
 
 const IndexPage: FunctionComponent<IGeneral> = ({
   signupHandler,
@@ -63,7 +64,7 @@ const IndexPage: FunctionComponent<IGeneral> = ({
             // />
             <Redirect
               to={{
-                pathname: '/secretary/profile',
+                pathname: '/users/profile',
                 state: { from: location },
               }}
             />
@@ -90,12 +91,12 @@ const IndexPage: FunctionComponent<IGeneral> = ({
           // ) */}
 
       <Route
-        path="/student/profile"
+        path="/users/profile"
         render={(props) =>
           isAuth && role === 'student' ? (
             <StudentProfile userId={userId as string} token={token as string} />
           ) : (
-            <Redirect to="/error/403" />
+            <Redirect to="/secretary/profile" />
           )
         }
       />
@@ -104,13 +105,22 @@ const IndexPage: FunctionComponent<IGeneral> = ({
         path="/secretary/students"
         render={(props) => <TableUser token={token} />}
       />
-      <Route path="/secretary/profile" render={(props) => <SecretaryProfile />} />
       <Route
-        path="/secreatry/findSuitableStudent"
-        render={(props) => <FormEmployer token={token} history={history} />}
+        path="/secretary/profile"
+        render={(props) => <SecretaryProfile />}
       />
-      {/* <Route path="/secretary/factors" component={TablePage} />
-      <Route path="/secretary/subjects" component={TablePage} /> */}
+      <Route
+        path="/secreatry/findsuitablestudent"
+        render={(props) => <TableForEmployer token={token} history={history} />}
+      />
+      {/* {(props) => <FormEmployer token={token} history={history} */}
+      {/* <Route path="/secretary/factors" component={TablePage} /> */}
+      <Route
+        path="/secretary/subjects"
+        render={(props) => {
+          return <Subjects token={token} />;
+        }}
+      />
 
       <Route
         path="/confirmRegestration/:token"
