@@ -306,7 +306,7 @@ function PersistentDrawerLeft(props: any) {
         <Divider />
         <List>
           {isAuth && (
-            <ListItem button key={0} component={Link} to={`/${role}/profile`}>
+            <ListItem button key={0} component={Link} to={`/users/profile`}>
               <ListItemIcon>
                 <VerifiedUser />
               </ListItemIcon>
