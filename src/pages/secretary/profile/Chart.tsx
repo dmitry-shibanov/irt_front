@@ -20,7 +20,7 @@ const data = [
   createData('24:00', undefined),
 ];
 
-export default function Chart() {
+const Chart: React.FC = (props) => {
   const theme = useTheme();
 
   return (
@@ -52,3 +52,5 @@ export default function Chart() {
     </React.Fragment>
   );
 }
+
+export default Chart;

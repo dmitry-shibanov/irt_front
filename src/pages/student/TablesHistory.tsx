@@ -1,14 +1,7 @@
-import React, { Component } from 'react'
-import { ListGroup } from 'react-bootstrap'
-class TablesHistoryList extends Component {
-    
-    render() {
-        return (
-          <div>
-            
-          </div>
-        );
-    }
+import React, { useState, useEffect } from 'react';
+
+function TableHistory() {
+
 }
 
-export default TablesHistoryList;
+export default TableHistory;

@@ -1,91 +1,93 @@
 import React, { Component, FormEvent } from 'react';
-import { required, length, email } from '../../../utils/validators';
-import Auth from '../AuthPage';
+// import { required } from '../../../utils/validators';
 import axios from '../../../axios-default';
 import Button from '../../../components/Button/Button';
-import Input from '../../../components/Form/Input';
+import {
+  Container,
+  CssBaseline,
+  Grid,
+  Link,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 
+class ResetPassword extends Component<unknown, any> {
 
-class ResetPassword extends Component<unknown, any>{
-    state = {
-        confirmForm: {
-          email: {
-            value: '',
-            valid: false,
-            touched: false,
-            validators: [required, email]
-          },
-          formIsValid: false
-        }
-      };
-    
-      inputChangeHandler = (input:any, value:any) => {
-        this.setState((prevState: any) => {
-          let isValid = true;
-          for (const validator of prevState.confirmForm[input].validators) {
-            isValid = isValid && validator(value);
-          }
-          const updatedForm = {
-            ...prevState.confirmForm,
-            [input]: {
-              ...prevState.confirmForm[input],
-              valid: isValid,
-              value: value
-            }
-          };
-          let formIsValid = true;
-          for (const inputName in updatedForm) {
-            formIsValid = formIsValid && updatedForm[inputName].valid;
-          }
-          return {
-            confirmForm: updatedForm,
-            formIsValid: formIsValid
-          };
-        });
-      };
-    
-      inputBlurHandler = (input: any) => {
-        this.setState((prevState: any) => {
-          return {
-            confirmForm: {
-              ...prevState.confirmForm,
-              [input]: {
-                ...prevState.confirmForm[input],
-                touched: true
-              }
-            }
-          };
-        });
-      };
+  useStyles = makeStyles((theme) => ({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(1),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+  }));
 
-      sendConfirmationEmail = async (e: FormEvent) => {
-        const result = await axios.post("/auth/reset", {
-            email: this.state.confirmForm["email"].value
-        },{method:"POST"});
-      }
-    
-      render() {
-        return (
-          <Auth>
-            <form onSubmit={this.sendConfirmationEmail}>
-              <Input
-                id="email"
-                label="Your E-Mail"
-                type="email"
-                control="input"
-                onChange={this.inputChangeHandler}
-                onBlur={this.inputBlurHandler.bind(this, 'email')}
-                value={this.state.confirmForm['email'].value}
-                valid={this.state.confirmForm['email'].valid}
-                touched={this.state.confirmForm['email'].touched}
-              />
-              <Button design="raised" type="submit">
-                Send confirmation email
-              </Button>
-            </form>
-          </Auth>
-        );
-      }
+  sendConfirmationEmail = async (e: FormEvent) => {
+    e.preventDefault();
+    const result = await axios.post(
+      '/auth/reset',
+      {
+        email: this.state.confirmForm['email'].value,
+      },
+      { method: 'POST' }
+    );
+  };
+
+  render() {
+    const classes = this.useStyles();
+
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Востановить/Сменить пароль
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
+    );
+  }
 }
 
 export default ResetPassword;

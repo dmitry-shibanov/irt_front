@@ -11,12 +11,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import Alert from '../../components/Alert/Alert';
 import {
   required,
   length,
   email as emailValidation,
 } from '../../utils/validators';
+import { Color } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,10 +52,17 @@ const SignIn: FunctionComponent<any> = (props: any) => {
     valid: false,
   });
   const [formIsValid, setFormIsValid] = useState(false);
+  const [isAlertOpen, setAlert] = useState(false);
+  const [error, setError] = useState<{
+    severity: Color;
+    message: string;
+    title: string;
+  } | null>(null);
 
-  const onClickLink: (React.MouseEventHandler<HTMLAnchorElement> & React.MouseEventHandler<HTMLSpanElement>) = () => {
+  const onClickLink: React.MouseEventHandler<HTMLAnchorElement> &
+    React.MouseEventHandler<HTMLSpanElement> = () => {
     props.history.replace('/auth/reset');
-  }
+  };
 
   const onChangePassword: React.ChangeEventHandler<
     HTMLTextAreaElement | HTMLInputElement
@@ -81,6 +89,14 @@ const SignIn: FunctionComponent<any> = (props: any) => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      {error && isAlertOpen ? (
+        <Alert
+          title={error.title}
+          message={error.message}
+          severity={error.severity}
+        />
+      ) : null}
+
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
