@@ -34,6 +34,7 @@ const columns: GridColDef[] = [
 export default function DataTable(props: any) {
   const [users, setUsers] = React.useState<Array<any>>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const tableRef = React.useRef(null);
   const [rows, setRows] = React.useState<
     Array<{
       id: Number;
@@ -88,6 +89,7 @@ export default function DataTable(props: any) {
     <div style={{ height: '83vh', width: '100%' }}>
       {!isLoading ? (
         <DataGrid
+          ref={tableRef}
           rows={rows}
           columns={columns}
           pageSize={20}

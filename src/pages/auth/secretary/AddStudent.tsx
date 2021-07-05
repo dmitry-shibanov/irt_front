@@ -3,23 +3,21 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-function LoadExcelData() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      <Link color="inherit" href="https://material-ui.com/">
-        Загрузить данные в виде excel
-      </Link>
-    </Typography>
-  );
-}
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,6 +41,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp(props: any) {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const InputUpload = styled('input')({
+    display: 'none',
+  });
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const LoadExcelData = () => {
+    return (
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        align="center"
+        onClick={handleClickOpen}
+      >
+        <Button color="inherit">Загрузить данные в виде excel</Button>
+        {/* <Link color="inherit" href="https://material-ui.com/">
+          
+        </Link> */}
+      </Typography>
+    );
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -137,6 +164,39 @@ export default function SignUp(props: any) {
       <Box mt={5}>
         <LoadExcelData />
       </Box>
+      <Dialog
+        // fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {'Загрузить excel файл'}
+        </DialogTitle>
+        <DialogContent>
+          {/* <Stack direction="row" alignItems="center" spacing={1}> */}
+          <label htmlFor="contained-button-file">
+            <InputUpload
+              accept="image/*"
+              id="contained-button-file"
+              multiple
+              type="file"
+            />
+            <Button variant="contained" component="span">
+              Файл
+            </Button>
+          </label>
+          {/* </Stack> */}
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} color="primary">
+            Отмена
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Выбрать
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

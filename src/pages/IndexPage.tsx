@@ -13,7 +13,9 @@ import TableUser from './secretary/tables/TableUsers';
 import StudentProfile from './student/StudentProfile';
 import SecretaryProfile from './secretary/profile/SecretaryProfile';
 import Subjects from './secretary/tables/TableSubjects';
-import TableForEmployer from './secretary/tables/TableForEmployer';
+import Factors from './secretary/tables/TableFactors';
+import TableForEmployer from './secretary/tables/TableEmployer';
+import ListOfTableResults from './secretary/ListOfTablesResult';
 
 const IndexPage: FunctionComponent<IGeneral> = ({
   signupHandler,
@@ -114,11 +116,20 @@ const IndexPage: FunctionComponent<IGeneral> = ({
         render={(props) => <TableForEmployer token={token} history={history} />}
       />
       {/* {(props) => <FormEmployer token={token} history={history} */}
-      {/* <Route path="/secretary/factors" component={TablePage} /> */}
+      <Route
+        path="/secretary/factors"
+        render={(props) => <Factors token={token as string} />}
+      />
       <Route
         path="/secretary/subjects"
         render={(props) => {
-          return <Subjects token={token} />;
+          return <Subjects token={token as string} />;
+        }}
+      />
+      <Route
+        path="/secretary/history"
+        render={(props) => {
+          return <ListOfTableResults token={token as string} />;
         }}
       />
 

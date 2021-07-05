@@ -1,9 +1,5 @@
-import * as React from 'react';
-import {
-  DataGrid,
-  GridColDef,
-  GridValueGetterParams,
-} from '@material-ui/data-grid';
+import React, { useState, useEffect } from 'react';
+import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import { CircularProgress, Grid } from '@material-ui/core';
 import axios from '../../../axios-default';
 
@@ -17,18 +13,15 @@ const columns: GridColDef[] = [
 ];
 
 export default function DataTable(props: any) {
-  const [subjects, setSubjects] = React.useState<
-    Array<{ _id: string; subject: string }>
-  >([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [rows, setRows] = React.useState<
+  const [isLoading, setIsLoading] = useState(true);
+  const [rows, setRows] = useState<
     Array<{
       id: Number;
       subject: string;
     }>
   >([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function getStudents() {
       const response = await axios.get('/secretary/subjects', {
         headers: {
@@ -39,20 +32,14 @@ export default function DataTable(props: any) {
         // redirect or something ealse
       }
 
-      const data = response.data;
-      setSubjects(data.subjects);
-      const rowsCopy: Array<{
-        id: Number;
-        subject: string;
-      }> = [];
-      console.log(data.subjects);
-      data.subjects.map((item: any, index: number) => {
-        rowsCopy.push({
+      const subjects = response.data.subjects;
+      const prepareRows = subjects.map((item: any, index: number) => {
+        return {
           id: index + 1,
           subject: item.name as string,
-        });
+        };
       });
-      setRows(rowsCopy);
+      setRows(prepareRows);
       setIsLoading(false);
     }
     getStudents();

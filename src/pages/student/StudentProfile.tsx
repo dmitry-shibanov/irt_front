@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Col, Container, Row, Spinner, Table } from 'react-bootstrap';
 import axios from '../../axios-default';
-import ISubjects from '../../models/state/ISubjects';
 import IStudent from '../../models/state/Student';
-
+import { DataGrid, GridColDef } from '@material-ui/data-grid';
+import { CircularProgress, Grid } from '@material-ui/core';
 class StudentProfile extends Component<
   { userId: string; token: string },
-  { student?: IStudent | undefined; isLoading: boolean }
+  { student?: IStudent | undefined; isLoading: boolean; tableRows?: any }
 > {
   constructor(props: { userId: string; token: string }) {
     super(props);
@@ -14,6 +13,12 @@ class StudentProfile extends Component<
       isLoading: true,
     };
   }
+
+  columns: GridColDef[] = [
+    { field: 'index', headerName: 'Индекс', width: 130 },
+    { field: 'subject', headerName: 'Предмет', width: 380 },
+    { field: 'mark', headerName: 'Оценка', width: 130 },
+  ];
 
   async componentDidMount() {
     const response = await axios.get<IStudent>(
@@ -30,67 +35,52 @@ class StudentProfile extends Component<
     }
 
     const studentFull = response.data;
+    const tableRows = studentFull.subjects.map((item, index) => {
+      return {
+        id: item.id._id,
+        index: index + 1,
+        subject: item.id.name,
+        mark: item.mark,
+      };
+    });
+    console.log(tableRows);
     console.log(studentFull);
     this.setState({
       isLoading: false,
       student: studentFull,
+      tableRows: tableRows,
     });
   }
 
   render() {
-    return !this.state.isLoading ? (
-      this.state.student ? (
-        <Container fluid style={{marginTop: "5rem"}}>
-          <Row>
-            <Col xs={1}></Col>
-            <Col xs={3}>
-              <Row> Имя: {this.state.student.firstName} </Row>
-              <Row> Фамилия: {this.state.student.lastName} </Row>
-              <Row> Курс: {this.state.student.course} </Row>
-              <Row> Группа: {this.state.student.group} </Row>
-            </Col>
-            <Col xs={8}>
-              <Table striped bordered hover variant="dark">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Предмет</th>
-                    <th>Оценка</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.student!.subjects.map(
-                    (item: { id: ISubjects; mark: string }, index: Number) => {
-                      return (
-                        <tr>
-                          <td>{index}</td>
-                          <td>{item.id.name}</td>
-                          <td>{item.mark}</td>
-                        </tr>
-                      );
-                    }
-                  )}
-                </tbody>
-              </Table>
-            </Col>
-          </Row>
-        </Container>
-      ) : (
-        <h1>Не удалось загрухить данные</h1>
-      )
-    ) : (
-      <Spinner
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
-        animation="border"
-        role="status"
-      >
-        <span className="sr-only">Loading...</span>
-      </Spinner>
+    return (
+      <div style={{ height: '83vh', width: '100%' }}>
+        {!this.state.isLoading ? (
+          this.state.student ? (
+            <DataGrid
+              rows={this.state.tableRows}
+              columns={this.columns}
+              pageSize={20}
+              checkboxSelection={false}
+            />
+          ) : (
+            <h1>Не удалось загрухить данные</h1>
+          )
+        ) : (
+          <Grid
+            container
+            justify="center"
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <CircularProgress />
+          </Grid>
+        )}
+      </div>
     );
   }
 }
